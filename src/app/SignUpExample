@@ -1,0 +1,191 @@
+import React, { useContext, useState } from 'react';
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+  ThemeProvider,
+} from '@mui/material';
+import {
+  createUserWithEmailAndPassword,
+  auth,
+  db,
+  doc,
+  setDoc,
+} from '../firebase/friebaseConfig';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useTheme } from '@mui/system';
+import { ThemeContext } from '../Contexts/ThemeContext';
+import CustomTextField from './BaseInput';
+import CustomButton from './BaseBtn';
+import PasswordInputWithIcon from './BasePassword';
+const Signup = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    number: '',
+  });
+
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
+
+  const bgImg =
+    'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
+  const bgGreenImg = './bggreen.jpeg';
+  const imgBgGreeen = './bg.jpg';
+
+  const validateForm = () => {
+    return Object.values(formData).every((value) => value.trim() !== '');
+  };
+
+  const handleSignup = async () => {
+    try {
+      if (!validateForm()) {
+        setError('Please fill in all fields.');
+        return;
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+
+      setLoading(true);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      await setDoc(doc(db, 'users', user.uid), {
+        userId: user.uid,
+        ...formData,
+      });
+
+      router.push('/signin');
+    } catch (error) {
+      console.error('Error signing up:', error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          width: '100vw',
+          height: '100vh',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundImage: `url(${imgBgGreeen})`,
+        }}
+      >
+        <Container
+          sx={{
+            backgroundColor: theme.palette.background.default,
+            padding: '20px',
+            width: '400px',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '16px',
+          }}
+        >
+          <Typography
+            variant='h4'
+            gutterBottom
+            style={{ color: theme.palette.text.primary, margin: 'auto' }}
+          >
+            Signup
+          </Typography>
+
+          {/* Map through form data and create CustomTextField components */}
+          {Object.entries(formData).map(([fieldName, fieldValue]) => (
+            <CustomTextField
+              key={fieldName}
+              label={fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}
+              type={
+                fieldName === 'password' || fieldName === 'confirmPassword'
+                  ? 'password'
+                  : 'text'
+              }
+              value={fieldValue}
+              onChange={(e) =>
+                setFormData({ ...formData, [fieldName]: e.target.value })
+              }
+              error={!fieldValue.trim() && error.includes(fieldName)}
+              helperText={
+                !fieldValue.trim() && error.includes(fieldName) && error
+              }
+              theme={theme}
+            />
+          ))}
+
+          {loading && <CircularProgress style={{ marginBottom: '12px' }} />}
+          {error &&
+            Object.keys(formData).every(
+              (fieldName) => !error.includes(fieldName)
+            ) && (
+              <Typography
+                variant='body2'
+                color='error'
+                style={{ marginBottom: '12px' }}
+              >
+                {error}
+              </Typography>
+            )}
+
+          <CustomButton text='Sign up' pressed={handleSignup} />
+          <Box
+            sx={{
+              marginTop: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px',
+              paddingRight: '20px',
+            }}
+          >
+            <Typography
+              sx={{
+                color: '#333',
+              }}
+            >
+              Already have an account?
+            </Typography>
+
+            <Link href={'/signin'} style={{ textDecoration: 'none' }}>
+              <Typography
+                variant='contained'
+                sx={{
+                  color: '#00401A',
+                  fontSize: '16px',
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                }}
+              >
+                Sign in
+              </Typography>
+            </Link>
+          </Box>
+        </Container>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default Signup;

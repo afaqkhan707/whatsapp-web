@@ -1,333 +1,3 @@
-// import React, { useContext, useState } from 'react';
-// import {
-//   Button,
-//   TextField,
-//   Container,
-//   Typography,
-//   Box,
-//   CircularProgress,
-//   ThemeProvider,
-// } from '@mui/material';
-// import {
-//   createUserWithEmailAndPassword,
-//   auth,
-//   db,
-//   doc,
-//   setDoc,
-// } from '../firebase/friebaseConfig';
-// import Link from 'next/link';
-// import { useRouter } from 'next/router';
-// import { useTheme } from '@mui/system';
-// import { ThemeContext } from '../Contexts/ThemeContext';
-
-// const Signup = () => {
-//   // const theme = useTheme();
-//   const [name, setName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [confirmPassword, setConfirmPassword] = useState('');
-//   const [number, setNumber] = useState('');
-//   const [error, setError] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const router = useRouter();
-//   const bgImg =
-//     'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
-//   const bgGreenImg = './bggreen.jpeg';
-//   const imgBgGreeen = './bg.jpg';
-
-//   const validateForm = () => {
-//     return (
-//       name.trim() !== '' &&
-//       email.trim() !== '' &&
-//       number.trim() !== '' &&
-//       password.trim() !== '' &&
-//       confirmPassword.trim() !== ''
-//     );
-//   };
-
-//   const handleSignup = async () => {
-//     try {
-//       if (!validateForm()) {
-//         setError('Please fill in all fields.');
-//         return;
-//       }
-
-//       if (password !== confirmPassword) {
-//         setError('Passwords do not match');
-//         return;
-//       }
-
-//       setLoading(true);
-//       const userCredential = await createUserWithEmailAndPassword(
-//         auth,
-//         email,
-//         password
-//       );
-//       const user = userCredential.user;
-
-//       await setDoc(doc(db, 'users', user.uid), {
-//         userId: user.uid,
-//         name,
-//         email,
-//         number,
-//       });
-
-//       // console.log('User registered successfully:', user);
-//       router.push('/signin');
-//     } catch (error) {
-//       console.error('Error signing up:', error.message);
-//       setError(error.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-//   const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <Box
-//         sx={{
-//           width: '100vw',
-//           height: '100vh',
-//           backgroundPosition: 'center',
-//           backgroundSize: 'cover',
-//           backgroundRepeat: 'no-repeat',
-//           backgroundImage: `url(${imgBgGreeen})`,
-//         }}
-//       >
-//         <Container
-//           sx={{
-//             backgroundColor: theme.palette.background.default,
-//             padding: '20px',
-//             width: '400px',
-//             // margin: 'auto',
-//             display: 'flex',
-//             flexDirection: 'column',
-//             position: 'absolute',
-//             top: '50%',
-//             left: '50%',
-//             transform: 'translate(-50%, -50%)',
-//             borderRadius: '16px',
-//           }}
-//         >
-//           <Typography
-//             variant='h4'
-//             gutterBottom
-//             style={{ color: theme.palette.text.primary, margin: 'auto' }}
-//           >
-//             Signup
-//           </Typography>
-//           <TextField
-//             label='Name'
-//             type='text'
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             fullWidth
-//             margin='normal'
-//             variant='outlined'
-//             required
-//             error={!name.trim() && error.includes('name')}
-//             helperText={!name.trim() && error.includes('name') && error}
-//             sx={{
-//               marginBottom: '12px',
-//               color: theme.palette.text.primary, // Set text color
-//               '& .MuiInputLabel-root': {
-//                 color: theme.palette.text.primary, // Set label color
-//               },
-//               '& .MuiOutlinedInput-root': {
-//                 '& fieldset': {
-//                   borderColor: theme.palette.text.primary, // Set border color
-//                 },
-//                 '&:hover fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color on hover
-//                 },
-//                 '&.Mui-focused fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color when focused
-//                 },
-//               },
-//             }}
-//           />
-//           <TextField
-//             label='Email'
-//             type='email'
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             fullWidth
-//             margin='normal'
-//             variant='outlined'
-//             required
-//             error={!email.trim() && error.includes('email')}
-//             helperText={!email.trim() && error.includes('email') && error}
-//             sx={{
-//               marginBottom: '12px',
-//               color: theme.palette.text.primary, // Set text color
-//               '& .MuiInputLabel-root': {
-//                 color: theme.palette.text.primary, // Set label color
-//               },
-//               '& .MuiOutlinedInput-root': {
-//                 '& fieldset': {
-//                   borderColor: theme.palette.text.primary, // Set border color
-//                 },
-//                 '&:hover fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color on hover
-//                 },
-//                 '&.Mui-focused fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color when focused
-//                 },
-//               },
-//             }}
-//           />
-//           <TextField
-//             label='Number'
-//             type='tel'
-//             value={number}
-//             onChange={(e) => setNumber(e.target.value)}
-//             fullWidth
-//             margin='normal'
-//             variant='outlined'
-//             required
-//             error={!number.trim() && error.includes('number')}
-//             helperText={!number.trim() && error.includes('number') && error}
-//             sx={{
-//               marginBottom: '12px',
-//               color: theme.palette.text.primary, // Set text color
-//               '& .MuiInputLabel-root': {
-//                 color: theme.palette.text.primary, // Set label color
-//               },
-//               '& .MuiOutlinedInput-root': {
-//                 '& fieldset': {
-//                   borderColor: theme.palette.text.primary, // Set border color
-//                 },
-//                 '&:hover fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color on hover
-//                 },
-//                 '&.Mui-focused fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color when focused
-//                 },
-//               },
-//             }}
-//           />
-//           <TextField
-//             label='Password'
-//             type='password'
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             fullWidth
-//             margin='normal'
-//             variant='outlined'
-//             required
-//             error={!password.trim() && error.includes('password')}
-//             helperText={!password.trim() && error.includes('password') && error}
-//             sx={{
-//               marginBottom: '12px',
-//               color: theme.palette.text.primary, // Set text color
-//               '& .MuiInputLabel-root': {
-//                 color: theme.palette.text.primary, // Set label color
-//               },
-//               '& .MuiOutlinedInput-root': {
-//                 '& fieldset': {
-//                   borderColor: theme.palette.text.primary, // Set border color
-//                 },
-//                 '&:hover fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color on hover
-//                 },
-//                 '&.Mui-focused fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color when focused
-//                 },
-//               },
-//             }}
-//           />
-//           <TextField
-//             label='Confirm Password'
-//             type='password'
-//             value={confirmPassword}
-//             onChange={(e) => setConfirmPassword(e.target.value)}
-//             fullWidth
-//             margin='normal'
-//             variant='outlined'
-//             required
-//             error={!confirmPassword.trim() && error.includes('confirmPassword')}
-//             helperText={
-//               !confirmPassword.trim() &&
-//               error.includes('confirmPassword') &&
-//               error
-//             }
-//             sx={{
-//               marginBottom: '12px',
-//               color: theme.palette.text.primary, // Set text color
-//               '& .MuiInputLabel-root': {
-//                 color: theme.palette.text.primary, // Set label color
-//               },
-//               '& .MuiOutlinedInput-root': {
-//                 '& fieldset': {
-//                   borderColor: theme.palette.text.primary, // Set border color
-//                 },
-//                 '&:hover fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color on hover
-//                 },
-//                 '&.Mui-focused fieldset': {
-//                   borderColor: theme.palette.primary.main, // Set border color when focused
-//                 },
-//               },
-//             }}
-//           />
-//           {loading && <CircularProgress style={{ marginBottom: '12px' }} />}
-//           {error &&
-//             !error.includes('name') &&
-//             !error.includes('email') &&
-//             !error.includes('number') &&
-//             !error.includes('password') &&
-//             !error.includes('confirmPassword') && (
-//               <Typography
-//                 variant='body2'
-//                 color='error'
-//                 style={{ marginBottom: '12px' }}
-//               >
-//                 {error}
-//               </Typography>
-//             )}
-//           <Button
-//             variant='outlined'
-//             onClick={handleSignup}
-//             sx={{
-//               bgcolor: '#0aa884',
-//               border: 'none',
-//               color: '#fff',
-//               fontSize: '16px',
-//               '&:hover': {
-//                 bgcolor: '#0aa884',
-//                 color: '##fff',
-//                 fontWeight: 'bold',
-//                 outline: 'none',
-//                 border: 'none',
-//               },
-//             }}
-//           >
-//             Signup
-//           </Button>
-//
-//           {isDarkMode ? (
-//             <Button
-//               onClick={toggleDarkMode}
-//               sx={{ color: theme.palette.text.primary }}
-//             >
-//               Switch to Light
-//             </Button>
-//           ) : (
-//             <Button
-//               onClick={toggleDarkMode}
-//               sx={{ color: theme.palette.text.primary }}
-//             >
-//               Switch to Dark
-//             </Button>
-//           )}
-//         </Container>
-//       </Box>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default Signup;
-
 import React, { useContext, useState } from 'react';
 import {
   Button,
@@ -349,77 +19,31 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from '@mui/system';
 import { ThemeContext } from '../Contexts/ThemeContext';
-import CustomTextField from './BaseInput';
 import CustomButton from './BaseBtn';
-import PasswordInputWithIcon from './BasePassword';
-
-// Custom TextField component
-// const CustomTextField = ({
-//   label,
-//   type,
-//   value,
-//   onChange,
-//   fullWidth = true,
-//   margin = 'normal',
-//   variant = 'outlined',
-//   required = true,
-//   error,
-//   helperText,
-//   theme,
-// }) => (
-//   <TextField
-//     label={label}
-//     type={type}
-//     value={value}
-//     onChange={onChange}
-//     fullWidth={fullWidth}
-//     margin={margin}
-//     variant={variant}
-//     required={required}
-//     error={error}
-//     helperText={helperText}
-//     sx={{
-//       marginBottom: '12px',
-//       color: theme.palette.text.primary, // Set text color
-//       '& .MuiInputLabel-root': {
-//         color: theme.palette.text.primary, // Set label color
-//       },
-//       '& .MuiOutlinedInput-root': {
-//         '& fieldset': {
-//           borderColor: theme.palette.text.primary, // Set border color
-//         },
-//         '&:hover fieldset': {
-//           borderColor: theme.palette.primary.main, // Set border color on hover
-//         },
-//         '&.Mui-focused fieldset': {
-//           borderColor: theme.palette.primary.main, // Set border color when focused
-//         },
-//       },
-//     }}
-//   />
-// );
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    number: '',
-  });
-
+  // const theme = useTheme();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [number, setNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
-
   const bgImg =
     'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
   const bgGreenImg = './bggreen.jpeg';
   const imgBgGreeen = './bg.jpg';
 
   const validateForm = () => {
-    return Object.values(formData).every((value) => value.trim() !== '');
+    return (
+      name.trim() !== '' &&
+      email.trim() !== '' &&
+      number.trim() !== '' &&
+      password.trim() !== '' &&
+      confirmPassword.trim() !== ''
+    );
   };
 
   const handleSignup = async () => {
@@ -429,7 +53,7 @@ const Signup = () => {
         return;
       }
 
-      if (formData.password !== formData.confirmPassword) {
+      if (password !== confirmPassword) {
         setError('Passwords do not match');
         return;
       }
@@ -437,16 +61,19 @@ const Signup = () => {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        formData.email,
-        formData.password
+        email,
+        password
       );
       const user = userCredential.user;
 
       await setDoc(doc(db, 'users', user.uid), {
         userId: user.uid,
-        ...formData,
+        name,
+        email,
+        number,
       });
 
+      // console.log('User registered successfully:', user);
       router.push('/signin');
     } catch (error) {
       console.error('Error signing up:', error.message);
@@ -455,7 +82,7 @@ const Signup = () => {
       setLoading(false);
     }
   };
-
+  const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -473,6 +100,7 @@ const Signup = () => {
             backgroundColor: theme.palette.background.default,
             padding: '20px',
             width: '400px',
+            // margin: 'auto',
             display: 'flex',
             flexDirection: 'column',
             position: 'absolute',
@@ -489,34 +117,166 @@ const Signup = () => {
           >
             Signup
           </Typography>
-
-          {/* Map through form data and create CustomTextField components */}
-          {Object.entries(formData).map(([fieldName, fieldValue]) => (
-            <CustomTextField
-              key={fieldName}
-              label={fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}
-              type={
-                fieldName === 'password' || fieldName === 'confirmPassword'
-                  ? 'password'
-                  : 'text'
-              }
-              value={fieldValue}
-              onChange={(e) =>
-                setFormData({ ...formData, [fieldName]: e.target.value })
-              }
-              error={!fieldValue.trim() && error.includes(fieldName)}
-              helperText={
-                !fieldValue.trim() && error.includes(fieldName) && error
-              }
-              theme={theme}
-            />
-          ))}
-
-          {loading && <CircularProgress style={{ marginBottom: '12px' }} />}
+          <TextField
+            label='Name'
+            type='text'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin='normal'
+            variant='outlined'
+            required
+            error={!name.trim() && error.includes('name')}
+            helperText={!name.trim() && error.includes('name') && error}
+            sx={{
+              marginBottom: '12px',
+              color: theme.palette.text.primary, // Set text color
+              '& .MuiInputLabel-root': {
+                color: theme.palette.text.primary, // Set label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.text.primary, // Set border color
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color when focused
+                },
+              },
+            }}
+          />
+          <TextField
+            label='Email'
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            margin='normal'
+            variant='outlined'
+            required
+            error={!email.trim() && error.includes('email')}
+            helperText={!email.trim() && error.includes('email') && error}
+            sx={{
+              marginBottom: '12px',
+              color: theme.palette.text.primary, // Set text color
+              '& .MuiInputLabel-root': {
+                color: theme.palette.text.primary, // Set label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.text.primary, // Set border color
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color when focused
+                },
+              },
+            }}
+          />
+          <TextField
+            label='Number'
+            type='tel'
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            fullWidth
+            margin='normal'
+            variant='outlined'
+            required
+            error={!number.trim() && error.includes('number')}
+            helperText={!number.trim() && error.includes('number') && error}
+            sx={{
+              marginBottom: '12px',
+              color: theme.palette.text.primary, // Set text color
+              '& .MuiInputLabel-root': {
+                color: theme.palette.text.primary, // Set label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.text.primary, // Set border color
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color when focused
+                },
+              },
+            }}
+          />
+          <TextField
+            label='Password'
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            margin='normal'
+            variant='outlined'
+            required
+            error={!password.trim() && error.includes('password')}
+            helperText={!password.trim() && error.includes('password') && error}
+            sx={{
+              marginBottom: '12px',
+              color: theme.palette.text.primary, // Set text color
+              '& .MuiInputLabel-root': {
+                color: theme.palette.text.primary, // Set label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.text.primary, // Set border color
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color when focused
+                },
+              },
+            }}
+          />
+          <TextField
+            label='Confirm Password'
+            type='password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            fullWidth
+            margin='normal'
+            variant='outlined'
+            required
+            error={!confirmPassword.trim() && error.includes('confirmPassword')}
+            helperText={
+              !confirmPassword.trim() &&
+              error.includes('confirmPassword') &&
+              error
+            }
+            sx={{
+              marginBottom: '12px',
+              color: theme.palette.text.primary, // Set text color
+              '& .MuiInputLabel-root': {
+                color: theme.palette.text.primary, // Set label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: theme.palette.text.primary, // Set border color
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main, // Set border color when focused
+                },
+              },
+            }}
+          />
           {error &&
-            Object.keys(formData).every(
-              (fieldName) => !error.includes(fieldName)
-            ) && (
+            !error.includes('name') &&
+            !error.includes('email') &&
+            !error.includes('number') &&
+            !error.includes('password') &&
+            !error.includes('confirmPassword') && (
               <Typography
                 variant='body2'
                 color='error'
@@ -525,14 +285,13 @@ const Signup = () => {
                 {error}
               </Typography>
             )}
-
           <CustomButton text='Sign up' pressed={handleSignup} />
           <Box
             sx={{
               marginTop: '10px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent:'center',
+              justifyContent: 'center',
               gap: '16px',
               paddingRight: '20px',
             }}
@@ -559,12 +318,12 @@ const Signup = () => {
               </Typography>
             </Link>
           </Box>
-          {/* <PasswordInputWithIcon /> */}
         </Container>
       </Box>
     </ThemeProvider>
   );
 };
+
 export default Signup;
 
 {

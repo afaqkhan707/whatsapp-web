@@ -35,12 +35,12 @@ const CustomButton = ({ text, pressed }) => {
   };
 
   return (
-    <Box sx={{ m: 1, position: 'relative' }}>
+    <Box sx={{ position: 'relative' }}>
       <Button
         variant='contained'
         sx={buttonSx}
         disabled={loading}
-        onClick={(handleButtonClick)}
+        onClick={handleButtonClick}
         fullWidth
       >
         {text}
