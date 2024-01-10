@@ -709,7 +709,43 @@ const countries = [
 
 // const bgGreenImg = './bggreen.jpeg';
 // const imgBgGreeen = './bg.jpg';
-  // const bgImg =
-  //   'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
+// const bgImg =
+//   'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
 
-  // const bgGreenImg = './bggreen.jpeg';
+// const bgGreenImg = './bggreen.jpeg';
+
+{
+  /* <TextField
+              label='Password'
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              fullWidth
+              margin='normal'
+              variant='outlined'
+              required
+              error={!password.trim() && error.includes('password')}
+              helperText={!password.trim() && error.includes('password') && error}
+              sx={{ ...inputFieldCss }}
+            /> */
+}
+
+{
+  /* <TextField
+              label='Confirm Password'
+              type='password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              fullWidth
+              margin='normal'
+              variant='outlined'
+              required
+              error={!confirmPassword.trim() && error.includes('confirmPassword')}
+              helperText={
+                !confirmPassword.trim() &&
+                error.includes('confirmPassword') &&
+                error
+              }
+              sx={{ ...inputFieldCss }}
+            /> */
+}

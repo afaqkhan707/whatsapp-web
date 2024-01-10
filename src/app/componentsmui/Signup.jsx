@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react';
 import {
-  Button,
   TextField,
   Container,
   Typography,
   Box,
-  CircularProgress,
   ThemeProvider,
 } from '@mui/material';
 import {
@@ -17,38 +15,50 @@ import {
 } from '../firebase/friebaseConfig';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useTheme } from '@mui/system';
 import { ThemeContext } from '../Contexts/ThemeContext';
 import CustomButton from './BaseBtn';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Signup = () => {
-  // const theme = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [number, setNumber] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const bgImg =
-    'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
-  const bgGreenImg = './bggreen.jpeg';
-  const imgBgGreeen = './bg.jpg';
 
-  const validateForm = () => {
-    return (
-      name.trim() !== '' &&
-      email.trim() !== '' &&
-      number.trim() !== '' &&
-      password.trim() !== '' &&
-      confirmPassword.trim() !== ''
-    );
-  };
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  // const validateForm = () => {
+  //   return (
+  //     name.trim() !== '' &&
+  //     email.trim() !== '' &&
+  //     number.trim() !== '' &&
+  //     password.trim() !== '' &&
+  //     confirmPassword.trim() !== ''
+  //   );
+  // };
 
   const handleSignup = async () => {
     try {
-      if (!validateForm()) {
+      if (
+        !name.trim() ||
+        !email.trim() ||
+        !number.trim() ||
+        !password.trim() ||
+        !confirmPassword.trim()
+      ) {
         setError('Please fill in all fields.');
         return;
       }
@@ -58,7 +68,6 @@ const Signup = () => {
         return;
       }
 
-      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -73,34 +82,85 @@ const Signup = () => {
         number,
       });
 
-      // console.log('User registered successfully:', user);
+      toast.success('Account created successfully!', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       router.push('/signin');
     } catch (error) {
-      console.error('Error signing up:', error.message);
-      setError(error.message);
+      // console.error('Error signing up:', error.message);
+      toast.error(error.code, {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      setError(error.code);
     } finally {
-      setLoading(false);
     }
   };
-  const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+
+  const responsiveCss = {
+    '@media (max-width: 440px)': {
+      maxWidth: '360px',
+    },
+    '@media (max-width: 370px)': {
+      maxWidth: '300px',
+      padding: '16px',
+    },
+    '@media (max-width: 300px)': {
+      maxWidth: '270px',
+      padding: '16px',
+    },
+  };
+  const inputFieldCss = {
+    marginBottom: '16px',
+    color: theme.palette.text.primary,
+    '& .MuiInputLabel-root': {
+      color: theme.palette.text.primary,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.text.primary,
+      },
+      '&:hover fieldset': {
+        borderColor: theme.palette.primary.main,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  };
   return (
     <ThemeProvider theme={theme}>
       <Box
         sx={{
           width: '100vw',
           height: '100vh',
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundImage: `url(${imgBgGreeen})`,
+          // backgroundPosition: 'center',
+          // backgroundSize: 'cover',
+          // backgroundRepeat: 'no-repeat',
+          // backgroundImage: `url(${imgBgGreeen})`,
+          overflow: 'hidden',
+          bgcolor: '#01260c',
         }}
       >
         <Container
           sx={{
             backgroundColor: theme.palette.background.default,
-            padding: '20px',
-            width: '400px',
-            // margin: 'auto',
+            padding: '30px',
+            width: '380px',
             display: 'flex',
             flexDirection: 'column',
             position: 'absolute',
@@ -108,6 +168,7 @@ const Signup = () => {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             borderRadius: '16px',
+            ...responsiveCss,
           }}
         >
           <Typography
@@ -121,6 +182,7 @@ const Signup = () => {
             label='Name'
             type='text'
             value={name}
+            size='small'
             onChange={(e) => setName(e.target.value)}
             fullWidth
             margin='normal'
@@ -128,29 +190,13 @@ const Signup = () => {
             required
             error={!name.trim() && error.includes('name')}
             helperText={!name.trim() && error.includes('name') && error}
-            sx={{
-              marginBottom: '12px',
-              color: theme.palette.text.primary, // Set text color
-              '& .MuiInputLabel-root': {
-                color: theme.palette.text.primary, // Set label color
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: theme.palette.text.primary, // Set border color
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color when focused
-                },
-              },
-            }}
+            sx={{ ...inputFieldCss }}
           />
           <TextField
             label='Email'
             type='email'
             value={email}
+            size='small'
             onChange={(e) => setEmail(e.target.value)}
             fullWidth
             margin='normal'
@@ -158,29 +204,13 @@ const Signup = () => {
             required
             error={!email.trim() && error.includes('email')}
             helperText={!email.trim() && error.includes('email') && error}
-            sx={{
-              marginBottom: '12px',
-              color: theme.palette.text.primary, // Set text color
-              '& .MuiInputLabel-root': {
-                color: theme.palette.text.primary, // Set label color
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: theme.palette.text.primary, // Set border color
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color when focused
-                },
-              },
-            }}
+            sx={{ ...inputFieldCss }}
           />
           <TextField
             label='Number'
             type='tel'
             value={number}
+            size='small'
             onChange={(e) => setNumber(e.target.value)}
             fullWidth
             margin='normal'
@@ -188,89 +218,80 @@ const Signup = () => {
             required
             error={!number.trim() && error.includes('number')}
             helperText={!number.trim() && error.includes('number') && error}
-            sx={{
-              marginBottom: '12px',
-              color: theme.palette.text.primary, // Set text color
-              '& .MuiInputLabel-root': {
-                color: theme.palette.text.primary, // Set label color
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: theme.palette.text.primary, // Set border color
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color when focused
-                },
-              },
-            }}
+            sx={{ ...inputFieldCss }}
           />
-          <TextField
-            label='Password'
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            margin='normal'
+
+          <FormControl
             variant='outlined'
-            required
-            error={!password.trim() && error.includes('password')}
-            helperText={!password.trim() && error.includes('password') && error}
-            sx={{
-              marginBottom: '12px',
-              color: theme.palette.text.primary, // Set text color
-              '& .MuiInputLabel-root': {
-                color: theme.palette.text.primary, // Set label color
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: theme.palette.text.primary, // Set border color
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color when focused
-                },
-              },
-            }}
-          />
-          <TextField
-            label='Confirm Password'
-            type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            fullWidth
+            sx={{ width: '100%', marginBottom: '10px', ...inputFieldCss }}
             margin='normal'
+          >
+            <InputLabel htmlFor='outlined-adornment-password' size='small'>
+              {'Password'}
+            </InputLabel>
+            <OutlinedInput
+              size='small'
+              autoComplete='password'
+              id='password'
+              name='password'
+              value={password}
+              type={showPassword ? 'text' : 'password'}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              endAdornment={
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                    edge='end'
+                  >
+                    {showPassword ? (
+                      <VisibilityOff size='small' />
+                    ) : (
+                      <Visibility size='small' />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label='Password'
+            />
+          </FormControl>
+
+          <FormControl
             variant='outlined'
-            required
-            error={!confirmPassword.trim() && error.includes('confirmPassword')}
-            helperText={
-              !confirmPassword.trim() &&
-              error.includes('confirmPassword') &&
-              error
-            }
-            sx={{
-              marginBottom: '12px',
-              color: theme.palette.text.primary, // Set text color
-              '& .MuiInputLabel-root': {
-                color: theme.palette.text.primary, // Set label color
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: theme.palette.text.primary, // Set border color
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.palette.primary.main, // Set border color when focused
-                },
-              },
-            }}
-          />
+            sx={{ width: '100%', marginBottom: '10px', ...inputFieldCss }}
+            margin='normal'
+          >
+            <InputLabel htmlFor='outlined-adornment-password' size='small'>
+              {'Confirm Password'}
+            </InputLabel>
+            <OutlinedInput
+              size='small'
+              autoComplete='password'
+              id='confirm_password'
+              name='conftirm_password'
+              value={confirmPassword}
+              type={showPassword ? 'text' : 'password'}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              endAdornment={
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                    edge='end'
+                  >
+                    {showPassword ? (
+                      <VisibilityOff size='small' />
+                    ) : (
+                      <Visibility size='small' />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label='Confirm Password'
+            />
+          </FormControl>
           {error &&
             !error.includes('name') &&
             !error.includes('email') &&
@@ -303,7 +324,6 @@ const Signup = () => {
             >
               Already have an account?
             </Typography>
-
             <Link href={'/signin'} style={{ textDecoration: 'none' }}>
               <Typography
                 variant='contained'
@@ -326,67 +346,3 @@ const Signup = () => {
 
 export default Signup;
 
-{
-  /* <Button
-  variant='outlined'
-  onClick={handleSignup}
-  sx={{
-    bgcolor: '#0aa884',
-    border: 'none',
-    color: '#fff',
-    fontSize: '16px',
-    '&:hover': {
-      bgcolor: '#0aa884',
-      color: '##fff',
-      fontWeight: 'bold',
-      outline: 'none',
-      border: 'none',
-    },
-  }}
->
-  Signup
-</Button>; */
-}
-
-// Link
-{
-  /* <Box
-            sx={{
-              marginTop: '10px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              sx={{
-                padding: '10px 20px',
-                bgcolor: '#0aa884',
-                color: '#fff',
-                borderRadius: '4px',
-              }}
-            >
-              Already have an account?
-            </Typography>
-            <Link href={'/signin'}>
-              <Button
-                variant='contained'
-                sx={{
-                  bgcolor: '#0aa884',
-                  border: 'none',
-                  color: '#fff',
-                  fontSize: '16px',
-                  '&:hover': {
-                    bgcolor: '#0aa884',
-                    color: '##fff',
-                    fontWeight: 'bold',
-                    outline: 'none',
-                    border: 'none',
-                  },
-                }}
-              >
-                Signin
-              </Button>
-            </Link>
-          </Box> */
-}

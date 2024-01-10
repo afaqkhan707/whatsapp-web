@@ -31,7 +31,7 @@ const SignIn = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const imgBgGreeen = './bg.jpg';
+  // const imgBgGreeen = './bg.jpg';
   const validateForm = () => {
     const errors = {};
     if (email.trim() === '') {
@@ -80,6 +80,8 @@ const SignIn = () => {
   };
 
   const { theme } = useContext(ThemeContext);
+
+  
   const inputFieldCss = {
     marginBottom: '16px',
     color: theme.palette.text.primary,
@@ -124,6 +126,7 @@ const SignIn = () => {
             // backgroundRepeat: 'no-repeat',
             // backgroundImage: `url(${imgBgGreeen})`,
             bgcolor: '#01260c',
+            overflow: 'hidden',
           }}
         >
           <Container
@@ -172,7 +175,6 @@ const SignIn = () => {
                 {signInError.email}
               </Typography>
             )}
-     
 
             <FormControl
               variant='outlined'
@@ -258,7 +260,8 @@ const SignIn = () => {
 
 export default SignIn;
 
-       {/* <TextField
+{
+  /* <TextField
               label='Password'
               type='password'
               id='password'
@@ -272,4 +275,5 @@ export default SignIn;
               size='small'
               required
               sx={{ ...inputFieldCss }}
-            /> */}
+            /> */
+}
