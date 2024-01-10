@@ -16,24 +16,17 @@ import {
 import Link from 'next/link';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useRouter } from 'next/router';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Landing = () => {
   const [open, setOpen] = React.useState(false);
   const [isMobileView, setIsMobileView] = React.useState(false);
   const router = useRouter();
   const toggleDrawer = () => setOpen(!open);
-  // const handleResponsive = () => {
-  //   if (window.innerWidth < 600) {
-  //     setIsMobileView(true);
-  //   } else {
-  //     setIsMobileView(false);
-  //   }
-  // };
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -89,7 +82,7 @@ const Landing = () => {
             />
             {isMobileView && (
               <Button onClick={toggleDrawer}>
-                <MenuOpen color='primary' />
+                <MenuIcon sx={{ color: '#fff' }} />
               </Button>
             )}
 
@@ -127,7 +120,6 @@ const Landing = () => {
                   anchor='right'
                   open={open}
                   onClose={toggleDrawer}
-                  
                   PaperProps={{
                     sx: {
                       width: '100%',
@@ -135,13 +127,9 @@ const Landing = () => {
                     },
                   }}
                 >
-                  <Box
-                    sx={{ width: 200 }}
-                    role='presentation'
-                    onClick={toggleDrawer}
-                  >
+                  <Box sx={{ width: 200 }} onClick={toggleDrawer}>
                     <List>
-                      <ListItem>
+                      <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <Home />
@@ -149,7 +137,7 @@ const Landing = () => {
                           <ListItemText primary='Home' />
                         </ListItemButton>
                       </ListItem>
-                      <ListItem>
+                      <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <FeaturedPlayList />
@@ -157,7 +145,7 @@ const Landing = () => {
                           <ListItemText primary='Features' />
                         </ListItemButton>
                       </ListItem>
-                      <ListItem>
+                      <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <ContactEmergency />
@@ -165,7 +153,7 @@ const Landing = () => {
                           <ListItemText primary='Contact' />
                         </ListItemButton>
                       </ListItem>
-                      <ListItem onClick={routeToSignUp}>
+                      <ListItem onClick={routeToSignUp} disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <PersonAdd />
@@ -173,7 +161,7 @@ const Landing = () => {
                           <ListItemText primary='Singup' />
                         </ListItemButton>
                       </ListItem>
-                      <ListItem onClick={routeToLogin}>
+                      <ListItem onClick={routeToLogin} disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <Login />
