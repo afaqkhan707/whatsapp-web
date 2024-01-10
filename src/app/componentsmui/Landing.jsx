@@ -8,7 +8,6 @@ import whatsappTextLogo from '../assets/whatsappLogo.png';
 import {
   PersonAdd,
   Login,
-  MenuOpen,
   Home,
   ContactEmergency,
   FeaturedPlayList,
@@ -64,6 +63,9 @@ const Landing = () => {
             color: '#fff',
             background: '#3333339e',
             backdropFilter: 'blur(16px)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <Toolbar
