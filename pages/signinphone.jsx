@@ -1,7 +1,7 @@
 import SignupNumber from '@/app/componentsmui/SignupNumber';
 import React from 'react';
 
-const number = () => {
+const signinphone = () => {
   return (
     <div>
       <SignupNumber />
@@ -9,4 +9,4 @@ const number = () => {
   );
 };
 
-export default number;
+export default signinphone;

@@ -9,8 +9,8 @@ function App({ Component, pageProps }) {
       <ThemeContextProvider>
         <LoggedUser>
           <Component {...pageProps} />
-          <ToastContainer />
         </LoggedUser>
+        <ToastContainer />
       </ThemeContextProvider>
     </>
   );

@@ -12,7 +12,8 @@ import {
   getDocs,
   updateDoc,
   getDoc,
-  deleteDoc,serverTimestamp
+  deleteDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 import {
   getAuth,
@@ -25,6 +26,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+// auth.languageCode = 'eng';
+// auth.languageCode = 'it';
 const db = getFirestore(app);
 const storage = getStorage(app);
 export {
@@ -48,5 +51,6 @@ export {
   getDocs,
   updateDoc,
   getDoc,
-  deleteDoc,serverTimestamp
+  deleteDoc,
+  serverTimestamp,
 };

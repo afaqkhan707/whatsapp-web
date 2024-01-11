@@ -81,7 +81,6 @@ const SignIn = () => {
 
   const { theme } = useContext(ThemeContext);
 
-  
   const inputFieldCss = {
     marginBottom: '16px',
     color: theme.palette.text.primary,
@@ -126,7 +125,7 @@ const SignIn = () => {
             // backgroundRepeat: 'no-repeat',
             // backgroundImage: `url(${imgBgGreeen})`,
             bgcolor: '#01260c',
-            overflow: 'hidden',
+            // overflow: 'hidden',
           }}
         >
           <Container
@@ -223,7 +222,7 @@ const SignIn = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '16px',
+                gap: '4px',
                 paddingRight: '20px',
               }}
             >

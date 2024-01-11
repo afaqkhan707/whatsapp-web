@@ -26,6 +26,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Phone } from '@mui/icons-material';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -313,7 +314,7 @@ const Signup = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '16px',
+              gap: '4px',
               paddingRight: '20px',
             }}
           >
@@ -338,6 +339,37 @@ const Signup = () => {
               </Typography>
             </Link>
           </Box>
+          <Box
+            sx={{
+              marginTop: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              paddingRight: '20px',
+            }}
+          >
+            <Typography
+              sx={{
+                color: '#333',
+              }}
+            >
+              Sign In With Phone <Phone />
+            </Typography>
+            <Link href={'/signinphone'} style={{ textDecoration: 'none' }}>
+              <Typography
+                variant='contained'
+                sx={{
+                  color: '#00401A',
+                  fontSize: '16px',
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                }}
+              >
+                Phone
+              </Typography>
+            </Link>
+          </Box>
         </Container>
       </Box>
     </ThemeProvider>
@@ -345,4 +377,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
