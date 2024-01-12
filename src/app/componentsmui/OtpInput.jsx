@@ -3,12 +3,6 @@ const OtpInput = ({ value, onChange }) => {
   const handleChange = (newValue) => {
     onChange(() => newValue);
   };
-
-  const css = {
-    '@media (max-width: 440px)': {
-      maxWidth: '360px',
-    },
-  };
   return (
     <>
       <MuiOtpInput

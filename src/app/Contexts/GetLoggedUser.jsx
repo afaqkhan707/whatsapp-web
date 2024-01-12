@@ -23,6 +23,7 @@ const LoggedUser = ({ children }) => {
     signOut(auth)
       .then(() => {
         router.push('signin');
+        setUser(null);
       })
       .catch((error) => {
         console.log(error);

@@ -36,7 +36,6 @@ const SignupNumber = () => {
   const [loggedUser, setLoggedUser] = useState(null);
   const [otp, setOtp] = useState('');
   const router = useRouter();
-  // console.log(loggedUser);
   // const [error, setError] = useState('');
   const { setUser } = useLoggedUserContext();
   const signInWithGoogle = async () => {
@@ -124,7 +123,6 @@ const SignupNumber = () => {
     }
   };
   const { theme } = useThemeContext();
-
   const responsiveCss = {
     '@media (max-width: 440px)': {
       maxWidth: '360px',
@@ -169,12 +167,7 @@ const SignupNumber = () => {
       padding: '16px',
     },
   };
-  // const refresh = () => {
-  //   console.log('refresh');
-  // };
-  // useEffect(() => {
-  //   refresh();
-  // }, [refresh]);
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -210,10 +203,9 @@ const SignupNumber = () => {
             >
               Sign In
             </Typography>
-            {/* <Refresh onClick={refresh} /> */}
             <MuiPhone
               value={phoneNumber}
-              onChange={(number) => setPhoneNumber('+' + number)}
+              onChange={(number) => setPhoneNumber(number)}
               sx={inputFieldCss}
             />
             <CustomButton text='Send Otp' pressed={sendOtp} />
@@ -240,7 +232,6 @@ const SignupNumber = () => {
               sx={{ ...inputFieldCss }}
             /> */}
             <OtpInput value={otp} onChange={setOtp} />
-
             <CustomButton
               text='Verify OTP'
               pressed={verifyOtp}
@@ -325,38 +316,7 @@ const SignupNumber = () => {
           </Container>
         </Box>
       </ThemeProvider>
-      {/* <ToastContainer /> */}
     </>
   );
 };
-
 export default SignupNumber;
-
-{
-  /* <TextField
-            label='Number'
-            type='number'
-            value={phoneNumber}
-            size='small'
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            fullWidth
-            margin='normal'
-            variant='outlined'
-            required
-            error={!phoneNumber.trim() && error.includes('number')}
-            helperText={
-              !phoneNumber.trim() && error.includes('number') && error
-            }
-            sx={{ ...inputFieldCss }}
-          /> */
-}
-{
-  /* <PhoneInput
-            country={'pk'}
-            value={phoneNumber}
-            onChange={(number) => setPhoneNumber('+' + number)}
-            placeholder='Phone Number'
-            enableSearch={true}
-           style={{width:'10%',marginBottom:'10px'}}
-          /> */
-}
