@@ -231,7 +231,7 @@ const SignupNumber = () => {
               required
               sx={{ ...inputFieldCss }}
             /> */}
-            <OtpInput value={otp} onChange={setOtp} />
+            {/* <OtpInput value={otp} onChange={setOtp} /> */}
             <CustomButton
               text='Verify OTP'
               pressed={verifyOtp}
