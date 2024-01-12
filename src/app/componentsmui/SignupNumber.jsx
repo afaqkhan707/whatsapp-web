@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
   Box,
+  Button,
   Container,
   TextField,
   ThemeProvider,
@@ -9,18 +10,26 @@ import {
 import CustomButton from './BaseBtn';
 import { useThemeContext } from '../Contexts/ThemeContext';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from '../firebase/friebaseConfig';
-
+import {
+  auth,
+  db,
+  setDoc,
+  doc,
+  signInWithPopup,
+  googleAuthSignin,
+} from '../firebase/friebaseConfig';
 // import PhoneInput from 'react-phone-input-2';
 // import 'react-phone-input-2/lib/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { getLoggedUser, useLoggedUserContext } from '../Contexts/GetLoggedUser';
 import Link from 'next/link';
-import { AccountBox, Email, PhonelinkSetupOutlined } from '@mui/icons-material';
+import { AccountBox, Email, Google } from '@mui/icons-material';
 // import { PhoneInput } from 'react-international-phone';
 // import 'react-international-phone/style.css';
 import MuiPhone from './PhoneInput';
+import OtpInput from './OtpInput';
+import {} from '../firebase/friebaseConfig';
 
 const SignupNumber = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -30,6 +39,41 @@ const SignupNumber = () => {
   // console.log(loggedUser);
   // const [error, setError] = useState('');
   const { setUser } = useLoggedUserContext();
+  const signInWithGoogle = async () => {
+    try {
+      const data = await signInWithPopup(auth, googleAuthSignin);
+      // console.log('data from google account', data);
+      const userId = data.user.uid;
+      const email = data.user.email;
+      await setDoc(doc(db, 'users', userId), {
+        userId,
+        email,
+      });
+      await setUser(data.user);
+      toast.success('Welcome to Whatsapp Clone', email, {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      router.push('whatsapp');
+    } catch (error) {
+      toast.success(error.code, {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
   const sendOtp = async (e) => {
     try {
       const recaptcha = new RecaptchaVerifier(auth, 'recaptcha', {});
@@ -67,8 +111,13 @@ const SignupNumber = () => {
   const verifyOtp = async (e) => {
     try {
       const data = await loggedUser.confirm(otp);
-      console.log(data);
-      await setUser(data.user.auth.uid);
+      const userId = data.user.uid;
+      await setUser(data.user);
+      await setDoc(doc(db, 'users', userId), {
+        userId,
+        number: phoneNumber,
+      });
+
       router.push('whatsapp');
     } catch (error) {
       console.log(error.code);
@@ -120,6 +169,12 @@ const SignupNumber = () => {
       padding: '16px',
     },
   };
+  // const refresh = () => {
+  //   console.log('refresh');
+  // };
+  // useEffect(() => {
+  //   refresh();
+  // }, [refresh]);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -155,7 +210,7 @@ const SignupNumber = () => {
             >
               Sign In
             </Typography>
-
+            {/* <Refresh onClick={refresh} /> */}
             <MuiPhone
               value={phoneNumber}
               onChange={(number) => setPhoneNumber('+' + number)}
@@ -165,13 +220,14 @@ const SignupNumber = () => {
             <Box
               id='recaptcha'
               sx={{
-                maxWidth: '400px',
+                maxWidth: '380px',
                 overflowX: 'auto',
                 overflowY: 'hidden',
                 ...reCapchaResponsivenes,
+                marginBottom: '10px',
               }}
             ></Box>
-            <TextField
+            {/* <TextField
               label='Enter OTP here'
               type='tel'
               size='small'
@@ -182,11 +238,17 @@ const SignupNumber = () => {
               variant='outlined'
               required
               sx={{ ...inputFieldCss }}
+            /> */}
+            <OtpInput value={otp} onChange={setOtp} />
+
+            <CustomButton
+              text='Verify OTP'
+              pressed={verifyOtp}
+              sx={{ marginTop: '10px' }}
             />
-            <CustomButton text='Verify OTP' pressed={verifyOtp} />
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: '20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -210,13 +272,24 @@ const SignupNumber = () => {
                     fontSize: '16px',
                     textDecoration: 'none',
                     fontWeight: 'bold',
-                    flexWrap:'nowrap'
+                    flexWrap: 'nowrap',
                   }}
                 >
                   Sign in
                 </Typography>
               </Link>
             </Box>
+            <CustomButton
+              icon={
+                <Google
+                  sx={{ color: '#fff', marginRight: '10px' }}
+                  size='small'
+                />
+              }
+              text='Google Sign in'
+              pressed={signInWithGoogle}
+              sx={{ marginTop: '10px' }}
+            />
             <Box
               sx={{
                 marginTop: '10px',

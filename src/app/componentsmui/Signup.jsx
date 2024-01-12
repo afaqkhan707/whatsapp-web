@@ -33,7 +33,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [number, setNumber] = useState('');
+  // const [number, setNumber] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -56,7 +56,7 @@ const Signup = () => {
       if (
         !name.trim() ||
         !email.trim() ||
-        !number.trim() ||
+        // !number.trim() ||
         !password.trim() ||
         !confirmPassword.trim()
       ) {
@@ -80,7 +80,6 @@ const Signup = () => {
         userId: user.uid,
         name,
         email,
-        number,
       });
 
       toast.success('Account created successfully!', {
@@ -207,7 +206,7 @@ const Signup = () => {
             helperText={!email.trim() && error.includes('email') && error}
             sx={{ ...inputFieldCss }}
           />
-          <TextField
+          {/* <TextField
             label='Number'
             type='tel'
             value={number}
@@ -220,7 +219,7 @@ const Signup = () => {
             error={!number.trim() && error.includes('number')}
             helperText={!number.trim() && error.includes('number') && error}
             sx={{ ...inputFieldCss }}
-          />
+          /> */}
 
           <FormControl
             variant='outlined'
@@ -296,7 +295,7 @@ const Signup = () => {
           {error &&
             !error.includes('name') &&
             !error.includes('email') &&
-            !error.includes('number') &&
+            // !error.includes('number') &&
             !error.includes('password') &&
             !error.includes('confirmPassword') && (
               <Typography

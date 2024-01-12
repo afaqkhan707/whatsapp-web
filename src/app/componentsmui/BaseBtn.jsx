@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, CircularProgress, Button } from '@mui/material';
 
-const CustomButton = ({ text, pressed }) => {
+const CustomButton = ({ text, pressed, sx, icon }) => {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const timer = React.useRef();
@@ -35,7 +35,7 @@ const CustomButton = ({ text, pressed }) => {
   };
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', ...sx }}>
       <Button
         variant='contained'
         sx={buttonSx}
@@ -43,6 +43,7 @@ const CustomButton = ({ text, pressed }) => {
         onClick={handleButtonClick}
         fullWidth
       >
+        <Box>{icon}</Box>
         {text}
         {loading && (
           <CircularProgress

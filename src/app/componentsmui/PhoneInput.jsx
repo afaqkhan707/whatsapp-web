@@ -48,7 +48,7 @@ const MuiPhone = ({ value, onChange, sx, ...restProps }) => {
   };
   return (
     <TextField
-      sx={{ margin: '10px 0px',color: theme.palette.text.primary, ...sx }}
+      sx={{ margin: '10px 0px',  }}
       size='small'
       variant='outlined'
       label='Phone number'
@@ -65,7 +65,6 @@ const MuiPhone = ({ value, onChange, sx, ...restProps }) => {
             style={{
               marginRight: '2px',
               marginLeft: '-8px',
-              color: theme.palette.text.primary,
             }}
           >
             <Select
@@ -83,6 +82,7 @@ const MuiPhone = ({ value, onChange, sx, ...restProps }) => {
               }}
               sx={{
                 width: 'max-content',
+                border:'none',
                 // Remove default outline (display only on focus)
                 fieldset: {
                   display: 'none',
