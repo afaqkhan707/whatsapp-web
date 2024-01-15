@@ -219,7 +219,7 @@ const SignupNumber = () => {
                 marginBottom: '10px',
               }}
             ></Box>
-            {/* <TextField
+            <TextField
               label='Enter OTP here'
               type='tel'
               size='small'
@@ -230,7 +230,7 @@ const SignupNumber = () => {
               variant='outlined'
               required
               sx={{ ...inputFieldCss }}
-            /> */}
+            />
             {/* <OtpInput value={otp} onChange={setOtp} /> */}
             <CustomButton
               text='Verify OTP'
