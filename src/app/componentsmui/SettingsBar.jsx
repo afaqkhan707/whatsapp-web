@@ -44,7 +44,7 @@ const SettingsBar = ({ sx }) => {
     },
     {
       content: <ThemeCard />,
-      method: () => console.log('hello'),
+      // method: () => console.log('hello'),
       button: (
         <SettingsSideBox
           icon={<Brightness6Icon fontSize='small' />}
@@ -116,8 +116,7 @@ const SettingsBar = ({ sx }) => {
                 icon={item.icon}
                 text={item.text}
                 onClick={item.method}
-                // color={item.color}
-                sx={{color: "#fff"}}
+                sx={{ color: '#fff' }}
               />
             )}
           </Box>

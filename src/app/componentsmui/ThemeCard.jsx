@@ -11,26 +11,47 @@ import {
 } from '@mui/material';
 import { useContext } from 'react';
 import { ThemeContext } from '../Contexts/ThemeContext';
+import { useState } from 'react';
 
 const ThemeCard = () => {
+  const [selectedMode, setSelectedMode] = useState('system');
   const { theme, toggleDarkMode, selectedTheme } = useContext(ThemeContext);
+  const [value, setValue] = useState(selectedTheme);
 
-  const handleThemeChange = (event) => {
-    const selectedTheme = event.target.value;
+  const handleChange = (e) => {
+    const selectedTheme = e.target.value;
+    setValue(e.target.value);
+    console.log(e.target.value);
+    setSelectedMode(e.target.value);
     toggleDarkMode(selectedTheme);
   };
+  // const handleThemeChange = (e) => {
+  //   const selectedTheme = e.target.value;
+  //   console.log(e.target.value);
+  //   setSelectedMode(e.target.value);
+  //   toggleDarkMode(selectedTheme);
+  // };
 
   return (
-    // <CardContent>
     <FormControl>
-      <FormLabel sx={{ color: theme.palette.text.primary }}>Theme</FormLabel>
-      <RadioGroup defaultValue='light' onChange={handleThemeChange}>
+      <FormLabel id='demo-controlled-radio-buttons-group'>
+        Chose Theme
+      </FormLabel>
+      <RadioGroup
+        aria-labelledby='demo-controlled-radio-buttons-group'
+        name='controlled-radio-buttons-group'
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel
+          value='system'
+          control={<Radio />}
+          label='System Default'
+        />
         <FormControlLabel value='light' control={<Radio />} label='Light' />
         <FormControlLabel value='dark' control={<Radio />} label='Dark' />
-        <FormControlLabel value='system' control={<Radio />} label='System' />
       </RadioGroup>
     </FormControl>
-    // </CardContent>
   );
 };
 

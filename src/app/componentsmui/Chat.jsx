@@ -49,6 +49,7 @@ import {
 import InputFileUpload from './ChatInput';
 import Message from './Message';
 import { useThemeContext } from '../Contexts/ThemeContext';
+import ChattingHead from './ChattingHead';
 
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -144,9 +145,9 @@ const Chat = () => {
   const open = Boolean(anchorEl);
   const openDoc = Boolean(send);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
   const handleClickDoc = (event) => {
     setSend(event.currentTarget);
   };
@@ -154,13 +155,13 @@ const Chat = () => {
     setAnchorEl(null);
     setSend(null);
   };
-  const handleCloseDropDown = () => {
-    setAnchorEl(null);
-    setSend(null);
-  };
-  const handleCloseChat = () => {
-    setCurrentChatUser(null);
-  };
+  // const handleCloseDropDown = () => {
+  //   setAnchorEl(null);
+  //   setSend(null);
+  // };
+  // const handleCloseChat = () => {
+  //   setCurrentChatUser(null);
+  // };
   useEffect(() => {
     getChatmessages();
   }, [currentChatUser.id]);
@@ -170,34 +171,12 @@ const Chat = () => {
 
   const handleChange = async (e) => {
     const selectedFile = e.target.files[0];
-    // console.log(selectedFile);
     setAddedFile(selectedFile);
-    // if (selectedFile) {
-    //   try {
-    //     const fileType = selectedFile.type.split('/')[0];
-    //     const storageRef = ref(
-    //       storage,
-    //       `files/${fileType}/${selectedFile.name}`
-    //     );
-
-    //     await uploadBytes(storageRef, selectedFile);
-
-    //     const downloadURL = await getDownloadURL(storageRef);
-    //     await setAttachemnt({
-    //       fileType: selectedFile.type,
-    //       fileName: selectedFile.name,
-    //       fileSize: selectedFile.size,
-    //       fileDownloadLink: downloadURL,
-    //     });
-    //   } catch (error) {
-    //     console.error('Error uploading file:', error);
-    //   }
-    // }
   };
 
   return (
     <>
-      <Box
+      {/* <Box
         sx={{
           width: '100%',
           padding: '8px 16px ',
@@ -269,8 +248,8 @@ const Chat = () => {
             <MenuItem>Block</MenuItem>
           </Menu>
         </Box>
-      </Box>
-
+      </Box> */}
+      <ChattingHead />
       <Box
         sx={{
           flexGrow: '1',
@@ -284,7 +263,7 @@ const Chat = () => {
           overflowX: 'hidden',
           bgcolor: theme.palette.background.default,
         }}
-        onClick={handleCloseDropDown}
+        // onClick={handleCloseDropDown}
       >
         {chatMessages.map((message, index) => (
           <Message

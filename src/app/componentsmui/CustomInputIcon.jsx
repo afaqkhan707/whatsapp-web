@@ -7,50 +7,38 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function PasswordInputWithIcon() {
+export default function PasswordInputWithIcon({
+  onChange,
+  label,
+  name,
+  value,
+  htmlfor,
+  type,
+}) {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (e) => {
-    console.log(e.target.value);
-  };
-
   return (
-    <FormControl
-      variant='outlined'
-      sx={{ width: '100%', marginBottom: '10px' }}
-    >
-      <InputLabel htmlFor='outlined-adornment-password' size='small'>
-        {'Password'}
+    <FormControl sx={{ marginBottom: '10px' }}>
+      <InputLabel htmlFor={htmlfor} size='small'>
+        {label}
       </InputLabel>
+
       <OutlinedInput
+        name={name}
+        value={value}
         size='small'
-        id='outlined-adornment-password'
-        type={showPassword ? 'text' : 'password'}
-        onChange={handleChange}
+        id={htmlfor}
+        type={showPassword ? 'text' : type}
+        onChange={(e) => onChange(e)}
         required
         endAdornment={
-          <InputAdornment position='end'>
-            <IconButton
-              aria-label='toggle password visibility'
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge='end'
-            >
-              {showPassword ? (
-                <VisibilityOff size='small' />
-              ) : (
-                <Visibility size='small' />
-              )}
-            </IconButton>
-          </InputAdornment>
+          <IconButton onClick={handleClickShowPassword}>
+            {showPassword ? <VisibilityOff /> : <Visibility size='small' />}
+          </IconButton>
         }
-        label='Password'
+        label={label}
       />
     </FormControl>
   );

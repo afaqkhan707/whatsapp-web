@@ -7,6 +7,7 @@ import {
   Box,
   CircularProgress,
   ThemeProvider,
+  IconButton,
 } from '@mui/material';
 import {
   createUserWithEmailAndPassword,
@@ -21,46 +22,56 @@ import { useTheme } from '@mui/system';
 import { ThemeContext } from '../Contexts/ThemeContext';
 import CustomButton from './BaseBtn';
 import PasswordInputWithIcon from './CustomInputIcon';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const SignupEmail = () => {
   // const theme = useTheme();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [number, setNumber] = useState('');
+  // const [name, setName] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
+  // const [number, setNumber] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    number: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const handleFormData = (e) => {
+    const { name, value } = e.target;
+    console.log(value, 'value');
+    setFormData({ ...formData, [name]: value });
+  };
+
   const [error, setError] = useState('');
+  const [passwordChecker, setPasswordChecker] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const bgImg =
-    'https://img.freepik.com/premium-photo/3d-rendering-bunch-square-badges-with-whatsapp-logo-green-background_284880-352.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais';
-  const bgGreenImg = './bggreen.jpeg';
+
   const imgBgGreeen = './bg.jpg';
 
   const handleSignup = async () => {
     try {
-      if (password !== confirmPassword) {
-        setError('Passwords do not match');
-        return;
-      }
-
       setLoading(true);
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      if (passwordMatch)
+        // const userCredential = await createUserWithEmailAndPassword(
+        //   auth,
+        //   email,
+        //   password
+        // );
+        // const user = userCredential.user;
 
-      await setDoc(doc(db, 'users', user.uid), {
-        userId: user.uid,
-        name,
-        email,
-        number,
-      });
+        // await setDoc(doc(db, 'users', user.uid), {
+        //   userId: user.uid,
+        //   name,
+        //   email,
+        //   number,
+        // });
 
-      // console.log('User registered successfully:', user);
-      router.push('/signin');
+        // console.log('User registered successfully:', user);
+        router.push('/signin');
     } catch (error) {
       console.error('Error signing up:', error.message);
       setError(error.message);
@@ -68,29 +79,10 @@ const SignupEmail = () => {
       setLoading(false);
     }
   };
-  // const [name, setName] = useState('');
-  const [nameValid, setNameValid] = useState(false);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    // Focus the input on initial render
-    if (inputRef.current && !name) {
-      inputRef.current.focus();
-    }
-  }, []);
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-    setNameValid(e.target.value.trim() !== '');
-  };
-
   const { theme, toggleDarkMode, isDarkMode } = useContext(ThemeContext);
   const sx = {
     marginBottom: '12px',
     color: theme.palette.text.primary,
-    '& .MuiOutlinedInput-root': {
-      borderColor: !nameValid ? '#f15c6d' : theme.palette.primary.main, // Dynamic border color
-    },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         borderColor: theme.palette.text.primary,
@@ -98,20 +90,23 @@ const SignupEmail = () => {
       '&:hover fieldset': {
         borderColor: theme.palette.primary.main,
       },
-      '&.Mui-focused fieldset': {
-        borderColor: !nameValid ? '#f15c6d' : theme.palette.primary.main,
-      },
-      ...(nameValid &&
-        !name && {
-          '&.MuiOutlinedInput-root': {
-            borderColor: '#f15c6d',
-          },
-        }),
-      '&.MuiOutlinedInput-root:focus-out fieldset': {
-        borderColor: '#f15c6d',
-      },
     },
   };
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      setPasswordChecker(true);
+    }
+    if (formData.password === formData.confirmPassword) {
+      setPasswordMatch(true);
+    } else {
+      setPasswordMatch(false);
+    }
+  }, [formData.password, formData.confirmPassword]);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -148,97 +143,69 @@ const SignupEmail = () => {
           </Typography>
           <TextField
             label='Name'
-            placeholder='Enter your name here'
             type='text'
             size='small'
+            name='name'
             fullWidth
-            value={name}
-            onChange={handleNameChange}
+            value={formData.name}
+            onChange={handleFormData}
             margin='normal'
             variant='outlined'
             autoFocus={false}
             required
-            error={!nameValid} // Combine first-time focus and empty value logic
-            helperText={!nameValid && 'Name is required'}
-            InputProps={{
-              inputRef,
-            }}
             sx={{ ...sx }}
           />
           <TextField
             label='Email'
             type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            size='small'
+            name='email'
+            value={formData.email}
+            onChange={handleFormData}
             fullWidth
             margin='normal'
             variant='outlined'
             required
-            error={!email.trim() && error.includes('email')}
-            helperText={!email.trim() && error.includes('email') && error}
             sx={{ ...sx }}
+            endAdornment={
+              <IconButton onClick={handleClickShowPassword}>
+                {showPassword ? <VisibilityOff /> : <Visibility size='small' />}
+              </IconButton>
+            }
           />
           <TextField
             label='Number'
+            name='number'
             type='tel'
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            size='small'
+            value={formData.number}
+            onChange={handleFormData}
             fullWidth
             margin='normal'
             variant='outlined'
             required
-            error={!number.trim() && error.includes('number')}
-            helperText={!number.trim() && error.includes('number') && error}
-            sx={{ ...sx }}
-          />
-          {/* <TextField
-            label='Password'
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            margin='normal'
-            variant='outlined'
-            required
-            error={!password.trim() && error.includes('password')}
-            helperText={!password.trim() && error.includes('password') && error}
-            sx={{ ...sx }}
-          /> */}
-          <PasswordInputWithIcon
-            label='Password'
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={!password.trim() && error.includes('password')}
-            helperText={!password.trim() && error.includes('password') && error}
             sx={{ ...sx }}
           />
 
-          {/* <TextField
-            label='Confirm Password'
-            type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            fullWidth
-            margin='normal'
-            variant='outlined'
-            required
-          /> */}
           <PasswordInputWithIcon
-            label='Confirm Password'
+            label='Password'
             type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            error={!confirmPassword.trim() && error.includes('confirmPassword')}
-            helperText={
-              !confirmPassword.trim() &&
-              error.includes('confirmPassword') &&
-              error
-            }
-            fullWidth
+            name='password'
+            htmlfor='password'
+            value={formData.password}
+            onChange={handleFormData}
             sx={{ ...sx }}
           />
-          {/* <PasswordInputWithIcon /> */}
+
+          <PasswordInputWithIcon
+            label='Confirm Password'
+            htmlfor='cPassword'
+            type='password'
+            name='confirmPassword'
+            value={formData.confirmPassword}
+            onChange={handleFormData}
+            sx={{ ...sx }}
+          />
           {loading && <CircularProgress style={{ marginBottom: '12px' }} />}
           {error && (
             <Typography
@@ -249,7 +216,17 @@ const SignupEmail = () => {
               {error}
             </Typography>
           )}
+
           <CustomButton text='Sign up' pressed={handleSignup} />
+          {passwordChecker && (
+            <Typography
+              variant='body2'
+              color={passwordMatch ? 'green' : 'error'}
+              style={{ margin: '12px 0px 0px 0px ' }}
+            >
+              {passwordMatch ? 'Password Match' : 'Password do Not Match'}
+            </Typography>
+          )}
           <Box
             sx={{
               marginTop: '10px',

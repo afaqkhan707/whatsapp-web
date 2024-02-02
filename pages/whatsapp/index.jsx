@@ -27,4 +27,5 @@ const whatsapp = () => {
   );
 };
 
-export default withAuth(whatsapp);
+export default whatsapp;
+// export default withAuth(whatsapp);
