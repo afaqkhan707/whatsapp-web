@@ -28,7 +28,6 @@ import { AccountBox, Email, Google } from '@mui/icons-material';
 // import { PhoneInput } from 'react-international-phone';
 // import 'react-international-phone/style.css';
 import MuiPhone from './PhoneInput';
-import OtpInput from './OtpInput';
 import {} from '../firebase/friebaseConfig';
 
 const SignupNumber = () => {
@@ -271,12 +270,12 @@ const SignupNumber = () => {
               </Link>
             </Box>
             <CustomButton
-              icon={
+              icon={() => (
                 <Google
                   sx={{ color: '#fff', marginRight: '10px' }}
                   size='small'
                 />
-              }
+              )}
               text='Google Sign in'
               pressed={signInWithGoogle}
               sx={{ marginTop: '10px' }}

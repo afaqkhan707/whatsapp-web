@@ -8,16 +8,15 @@ import {
   setDoc,
   onAuthStateChanged,
   auth,
-  
 } from '../firebase/friebaseConfig';
 
 export const GetAddedUsers = createContext();
 
 const GetAddedUsersProvider = ({ children }) => {
-  const [currentChatUser, setCurrentChatUser] = useState();
-  
+  const [currentChatUser, setCurrentChatUser] = useState(null);
+
   const [addedUsers, setAddedUsers] = useState([]);
-  
+
   const addNewUser = (addUser, setOpenNewChat) => {
     onAuthStateChanged(auth, (loggedInUser) => {
       if (loggedInUser) {
@@ -30,7 +29,7 @@ const GetAddedUsersProvider = ({ children }) => {
             addUser.id
           );
           setDoc(contactedUsersRef, addUser);
-          
+
           setOpenNewChat(false);
         } catch (error) {
           console.error('Error adding document: ', error);

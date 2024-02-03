@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import {
   Box,
   IconButton,
@@ -21,8 +21,9 @@ import { GetAddedUsers } from '../Contexts/GetAddedUsers';
 const ChattingHead = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [send, setSend] = useState(null);
+
   const open = Boolean(anchorEl);
-  const openDoc = Boolean(send);
+  // const openDoc = Boolean(send);
   const { currentChatUser, setCurrentChatUser } = useContext(GetAddedUsers);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,7 +43,14 @@ const ChattingHead = () => {
     setCurrentChatUser(null);
   };
   const { theme } = useThemeContext();
-
+  const themeModeMenu = {
+    color: theme.palette.text.primary,
+    bgcolor: theme.palette.background.default,
+    '&:hover': {
+      color: theme.palette.hover.primay,
+      bgcolor: theme.palette.hover.primary,
+    },
+  };
   return (
     <>
       <Box
@@ -86,7 +94,9 @@ const ChattingHead = () => {
             </Button>
           </Tooltip>
           <Tooltip title='Search...'>
-            <IconButton>
+            <IconButton
+              sx={{ color: '#54656f', color: theme.palette.text.primary }}
+            >
               <SearchIcon />
             </IconButton>
           </Tooltip>
@@ -97,6 +107,10 @@ const ChattingHead = () => {
               aria-haspopup='true'
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
+              sx={{
+                color: theme.palette.text.primary,
+                bgcolor: theme.palette.background.default,
+              }}
             >
               <MoreVertOutlinedIcon fontSize='md' />
             </IconButton>
@@ -110,15 +124,17 @@ const ChattingHead = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem>Contact info</MenuItem>
-            <MenuItem>Select messages</MenuItem>
-            <MenuItem onClick={handleCloseChat}>Close chat</MenuItem>
-            <MenuItem>Mute notifications</MenuItem>
-            <MenuItem>Disappering messages</MenuItem>
-            <MenuItem>Clear chat</MenuItem>
-            <MenuItem>Delete chat</MenuItem>
-            <MenuItem>Report</MenuItem>
-            <MenuItem>Block</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Contact info</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Select messages</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleCloseChat}>
+              Close chat
+            </MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Mute notifications</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Disappering messages</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Clear chat</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Delete chat</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Report</MenuItem>
+            <MenuItem sx={{ ...themeModeMenu }}>Block</MenuItem>
           </Menu>
         </Box>
       </Box>

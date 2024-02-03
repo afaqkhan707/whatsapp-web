@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Box, IconButton, Typography, Avatar } from '@mui/material';
+import { Box, IconButton, Typography, Avatar, TextField } from '@mui/material';
 import { getLoggedUser } from '../Contexts/GetLoggedUser';
 import { DataContext } from '../Contexts/MyContextProvider';
 import SideBarHeading from './SideBarHead';
@@ -15,20 +15,48 @@ const UserProfile = ({ sx }) => {
 
   const [editingName, setEditingName] = useState(false);
   const [editingAbout, setEditingAbout] = useState(false);
+  const [editingNumber, setEditingNumber] = useState(false);
   const [editedName, setEditedName] = useState(user?.name || '');
   const [editedAbout, setEditedAbout] = useState(user?.about || '');
+  const [editedNumber, setEditedNumber] = useState(user?.number || '');
 
-  const handleSave = async () => {
+  const handleSaveName = async () => {
     if (user && user.userId) {
       const docRef = doc(db, 'users', user.userId);
 
       try {
         await updateDoc(docRef, {
           name: editedName,
-          bio: editedAbout,
         });
         setEditingName(false);
+      } catch (error) {
+        console.error('Error updating document:', error);
+      }
+    }
+  };
+  const handleSaveBio = async () => {
+    if (user && user.userId) {
+      const docRef = doc(db, 'users', user.userId);
+
+      try {
+        await updateDoc(docRef, {
+          bio: editedAbout,
+        });
         setEditingAbout(false);
+      } catch (error) {
+        console.error('Error updating document:', error);
+      }
+    }
+  };
+  const handleSaveNumber = async () => {
+    if (user && user.userId) {
+      const docRef = doc(db, 'users', user.userId);
+
+      try {
+        await updateDoc(docRef, {
+          number: editedNumber,
+        });
+        setEditingNumber(false);
       } catch (error) {
         console.error('Error updating document:', error);
       }
@@ -105,19 +133,17 @@ const UserProfile = ({ sx }) => {
             </Typography>
             {editingName ? (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <input
+                <TextField
                   type='text'
                   value={editedName}
                   onChange={(e) => setEditedName(e.target.value)}
-                  style={{
-                    border: 'none',
-                    outline: 'none',
-                    borderBottom: '0.5px solid #333',
-                    width: '100%',
-                  }}
+                  fullWidth
+                  size='small'
+                  defaulValue={user?.name}
+                  helperText='edit your name here...'
                 />
-                <IconButton onClick={handleSave}>
-                  <DoneIcon sx={{color:iconsCss}}/>
+                <IconButton onClick={handleSaveName}>
+                  <DoneIcon sx={{ color: iconsCss }} />
                 </IconButton>
               </Box>
             ) : (
@@ -125,12 +151,16 @@ const UserProfile = ({ sx }) => {
                 <Typography
                   variant='subtitle1'
                   flexGrow={1}
-                  sx={{ color: '#3b4a54', color:theme.palette.text.primary,fontSize: '14px' }}
+                  sx={{
+                    color: '#3b4a54',
+                    color: theme.palette.text.primary,
+                    fontSize: '14px',
+                  }}
                 >
                   {user?.name}
                 </Typography>
                 <IconButton onClick={() => setEditingName(true)}>
-                  <EditIcon fontSize='small' sx={{color:iconsCss}}/>
+                  <EditIcon fontSize='small' sx={{ color: iconsCss }} />
                 </IconButton>
               </Box>
             )}
@@ -146,7 +176,12 @@ const UserProfile = ({ sx }) => {
           >
             <Typography
               variant='body1'
-              sx={{ color: '#667781',color:theme.palette.text.primary, fontSize: '0.8rem', lineHeight: '1.4' }}
+              sx={{
+                color: '#667781',
+                color: theme.palette.text.primary,
+                fontSize: '0.8rem',
+                lineHeight: '1.4',
+              }}
             >
               This is not your username or pin. This name will be visible to
               your WhatsApp contacts.
@@ -162,25 +197,27 @@ const UserProfile = ({ sx }) => {
           >
             <Typography
               variant='subtitle1'
-              sx={{ color: '#008069',color:theme.palette.text.primary, fontSize: '12px' }}
+              sx={{
+                color: '#008069',
+                color: theme.palette.text.primary,
+                fontSize: '12px',
+              }}
             >
               About
             </Typography>
             {editingAbout ? (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <input
+                <TextField
                   type='text'
                   value={editedAbout}
                   onChange={(e) => setEditedAbout(e.target.value)}
-                  style={{
-                    border: 'none',
-                    outline: 'none',
-                    borderBottom: '0.5px solid #333',
-                    width: '100%',
-                  }}
+                  fullWidth
+                  size='small'
+                  defaulValue={user?.bio}
+                  helperText='edit your bio here...'
                 />
-                <IconButton onClick={handleSave}>
-                  <DoneIcon sx={{color:iconsCss}}/>
+                <IconButton onClick={handleSaveBio}>
+                  <DoneIcon sx={{ color: iconsCss }} />
                 </IconButton>
               </Box>
             ) : (
@@ -188,12 +225,16 @@ const UserProfile = ({ sx }) => {
                 <Typography
                   variant='subtitle1'
                   flexGrow={1}
-                  sx={{ color: '#3b4a54', color:theme.palette.text.primary,fontSize: '14px' }}
+                  sx={{
+                    color: '#3b4a54',
+                    color: theme.palette.text.primary,
+                    fontSize: '14px',
+                  }}
                 >
                   {user?.bio}
                 </Typography>
                 <IconButton onClick={() => setEditingAbout(true)}>
-                  <EditIcon fontSize='small' sx={{color:iconsCss}}/>
+                  <EditIcon fontSize='small' sx={{ color: iconsCss }} />
                 </IconButton>
               </Box>
             )}
@@ -212,13 +253,51 @@ const UserProfile = ({ sx }) => {
             >
               Contact Number
             </Typography>
-            <Typography
+            {editingNumber ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <TextField
+                  type='text'
+                  value={editedNumber}
+                  onChange={(e) => setEditedNumber(e.target.value)}
+                  fullWidth
+                  size='small'
+                  defaulValue={user?.number}
+                  helperText='edit your number here...'
+                />
+                <IconButton onClick={handleSaveNumber}>
+                  <DoneIcon sx={{ color: iconsCss }} />
+                </IconButton>
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography
+                  variant='subtitle1'
+                  flexGrow={1}
+                  sx={{
+                    color: '#3b4a54',
+                    color: theme.palette.text.primary,
+                    fontSize: '14px',
+                  }}
+                >
+                  {user?.number}
+                </Typography>
+                <IconButton onClick={() => setEditingNumber(true)}>
+                  <EditIcon fontSize='small' sx={{ color: iconsCss }} />
+                </IconButton>
+              </Box>
+            )}
+
+            {/* <Typography
               variant='subtitle1'
               flexGrow={1}
-              sx={{ color: '#3b4a54',color:theme.palette.text.primary, fontSize: '14px' }}
+              sx={{
+                color: '#3b4a54',
+                color: theme.palette.text.primary,
+                fontSize: '14px',
+              }}
             >
               {user?.number}
-            </Typography>
+            </Typography> */}
           </Box>
         </Box>
       </Box>

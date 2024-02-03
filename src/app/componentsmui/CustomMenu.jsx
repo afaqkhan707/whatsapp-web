@@ -16,7 +16,7 @@ const CustomMenu = ({ chatUser }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const DeleteAddedUser = (deletedDocId) => {
+  const DeleteAddedUser = async (deletedDocId) => {
     const contactedUsersRef = doc(
       db,
       'users',
@@ -24,8 +24,8 @@ const CustomMenu = ({ chatUser }) => {
       'contactedUsers',
       deletedDocId
     );
-    deleteDoc(contactedUsersRef);
-    setCurrentChatUser({});
+    await deleteDoc(contactedUsersRef);
+    setCurrentChatUser(null);
   };
   const handleClose = () => {
     setAnchorEl(null);

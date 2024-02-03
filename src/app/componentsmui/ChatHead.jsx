@@ -39,7 +39,14 @@ const ChatHead = () => {
     color: theme.palette.text.primary,
     bgcolor: theme.palette.background.default,
   };
-
+  const themeModeMenu = {
+    color: theme.palette.text.primary,
+    bgcolor: theme.palette.background.default,
+    '&:hover': {
+      color: theme.palette.hover.primay,
+      bgcolor: theme.palette.hover.primary,
+    },
+  };
   const handleSetting = () => {
     setOpenSettings(true);
     handleClose();
@@ -106,49 +113,44 @@ const ChatHead = () => {
             sx={{
               '.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper': {
                 borderRadius: ' 16px',
-                // bottom: '75px !important',
                 left: '190px !important',
                 top: '70px !important',
-                // iconsCss,
                 bgcolor: '#333',
-                color:'red'
+                color: 'red',
               },
             }}
             id='basic-menu'
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            // onClick={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
           >
-            <MenuItem sx={{iconsCss}} onClick={handleClose}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleClose}>
               New Group
             </MenuItem>
-            <MenuItem sx={{iconsCss}} onClick={handleClose}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleClose}>
               New commuinty
             </MenuItem>
-            <MenuItem sx={{iconsCss}} onClick={handleClose}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleClose}>
               Starred messages
             </MenuItem>
-            <MenuItem sx={{iconsCss}} onClick={handleClose}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleClose}>
               Select chats
             </MenuItem>
-            <MenuItem sx={{iconsCss}} onClick={handleSetting}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleSetting}>
               Settings
             </MenuItem>
 
             <DialogBox
-              openBtn={<MenuItem sx={{iconsCss}}>Log out</MenuItem>}
+              openBtn={<MenuItem sx={{ ...themeModeMenu }}>Log out</MenuItem>}
               content={
                 <DialogTitle>Are you sure you want to logout?</DialogTitle>
               }
               yesFunction={handleLogout}
               noFunction={handleClose}
+              BtnColor='#bf360c'
             />
             <Divider />
-            <MenuItem sx={{iconsCss}} onClick={handleClose}>
+            <MenuItem sx={{ ...themeModeMenu }} onClick={handleClose}>
               Get Whatsapp for Windows
             </MenuItem>
           </Menu>

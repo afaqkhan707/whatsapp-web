@@ -13,7 +13,7 @@ import { useContext } from 'react';
 import { ThemeContext, useThemeContext } from '../Contexts/ThemeContext';
 import { useLoggedUserContext } from '../Contexts/GetLoggedUser';
 
-const DialogBox = ({ content, openBtn, yesFunction, noFunction }) => {
+const DialogBox = ({ content, openBtn, yesFunction, noFunction, BtnColor }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -87,9 +87,11 @@ const DialogBox = ({ content, openBtn, yesFunction, noFunction }) => {
               variant='contained'
               sx={{
                 bgcolor: '#008069',
+                bgcolor: BtnColor,
                 borderRadius: '25px',
                 '&:hover': {
                   bgcolor: '#008069',
+                  bgcolor: BtnColor,
                 },
               }}
             >

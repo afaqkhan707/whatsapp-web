@@ -14,12 +14,10 @@ const ChatBg = () => {
     const isConfirmed = window.confirm(
       'https://web.whatsapp.com wants to open this application.'
     );
-
     if (isConfirmed) {
       window.location.href =
         'https://www.microsoft.com/store/productId/9NKSQGP7F2NH?ocid=pdpshare';
     } else {
-      // Do something else or nothing if the user clicked Cancel
     }
   };
   const { theme } = useContext(ThemeContext);
@@ -29,8 +27,7 @@ const ChatBg = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          width: '100%',
-          bgcolor: theme.palette.background.default,
+          alignItems: 'center',
         }}
       >
         <Card
@@ -38,15 +35,13 @@ const ChatBg = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            // bgcolor: '#f0f2f5',
             bgcolor: theme.palette.background.default,
             padding: '10px 20px',
-            width: '100%',
-            height: '400px',
+            width: '80%',
+            minHeight: '400px',
             border: 'none',
             color: '#41525d',
             color: theme.palette.text.primary,
-            border: 'none',
             boxShadow: 'none',
           }}
         >
@@ -114,7 +109,7 @@ const ChatBg = () => {
         <Box
           sx={{
             position: 'absolute',
-            top: '550px',
+            bottom: '10%',
             color: '#8696a0',
             display: 'flex',
             alignItems: 'center',

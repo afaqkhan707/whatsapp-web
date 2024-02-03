@@ -50,7 +50,8 @@ import InputFileUpload from './ChatInput';
 import Message from './Message';
 import { useThemeContext } from '../Contexts/ThemeContext';
 import ChattingHead from './ChattingHead';
-
+import { chatBg } from '../assets/chatbg.jpg';
+import Image from 'next/image';
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [send, setSend] = useState(null);
@@ -136,18 +137,12 @@ const Chat = () => {
     try {
       const deleteMsgRef = doc(db, 'chats', deltedMsgId);
       deleteDoc(deleteMsgRef);
-      set;
     } catch (error) {
       console.error('Error deleting message:', error);
     }
   };
-
   const open = Boolean(anchorEl);
   const openDoc = Boolean(send);
-
-  // const handleClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
   const handleClickDoc = (event) => {
     setSend(event.currentTarget);
   };
@@ -155,19 +150,15 @@ const Chat = () => {
     setAnchorEl(null);
     setSend(null);
   };
-  // const handleCloseDropDown = () => {
-  //   setAnchorEl(null);
-  //   setSend(null);
-  // };
-  // const handleCloseChat = () => {
-  //   setCurrentChatUser(null);
-  // };
+
   useEffect(() => {
     getChatmessages();
   }, [currentChatUser.id]);
 
   const chatbg =
     'https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png';
+  const bg =
+    'https://img.freepik.com/free-vector/chat-elements_1284-669.jpg?w=900&t=st=1706977882~exp=1706978482~hmac=7fb991428731f3724a44dbe7dd6af72a9b3638343d6903cfb490ecba86c73c4a';
 
   const handleChange = async (e) => {
     const selectedFile = e.target.files[0];
@@ -176,88 +167,18 @@ const Chat = () => {
 
   return (
     <>
-      {/* <Box
-        sx={{
-          width: '100%',
-          padding: '8px 16px ',
-          bgcolor: '#f0f2f5',
-          bgcolor: theme.palette.background.default,
-          minHeight: '54px',
-          maxHeight: '56px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Avatar alt='User' src={currentChatUser.proImgLink} />
-          <Box sx={{ fontSize: '14px', color: '#111b21' ,
-        color:theme.palette.text.primary
-        }}>
-            <Typography variant='h6'>{currentChatUser.name}</Typography>
-            <Typography variant='p'>
-              <small>Last seen today at 13:08</small>
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ color: '#54656f', color: theme.palette.text.primary }}>
-          <Tooltip title='Get the App for calling'>
-            <Button
-              variant='filledTonal'
-              sx={{
-                borderRadius: '25px',
-              }}
-            >
-              <VideocamIcon />
-              <ExpandMoreIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title='Search...'>
-            <IconButton>
-              <SearchIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='Menu'>
-            <IconButton
-              id='basic-button'
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup='true'
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            >
-              <MoreVertOutlinedIcon fontSize='md' />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            id='basic-menu'
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem>Contact info</MenuItem>
-            <MenuItem>Select messages</MenuItem>
-            <MenuItem onClick={handleCloseChat}>Close chat</MenuItem>
-            <MenuItem>Mute notifications</MenuItem>
-            <MenuItem>Disappering messages</MenuItem>
-            <MenuItem>Clear chat</MenuItem>
-            <MenuItem>Delete chat</MenuItem>
-            <MenuItem>Report</MenuItem>
-            <MenuItem>Block</MenuItem>
-          </Menu>
-        </Box>
-      </Box> */}
       <ChattingHead />
+      {/* Chats Render */}
+
       <Box
         sx={{
           flexGrow: '1',
           display: 'flex',
           flexDirection: 'column',
-          backgroundImage: `url(${chatbg})`,
+          backgroundImage: `url(${bg})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
+          width: '100%',
           backgroundRepeat: 'no-repeat',
           overflowX: 'auto',
           overflowX: 'hidden',
@@ -275,6 +196,7 @@ const Chat = () => {
         ))}
       </Box>
 
+      {/* Chat Footer & Input Area */}
       <Box
         sx={{
           display: 'flex',
